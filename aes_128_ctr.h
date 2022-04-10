@@ -9,8 +9,8 @@ public:
     virtual void decrypt();
 protected:
     struct u128i {
-        unsigned long long int high;
-        unsigned long long int low;
+        byte high[8];
+        byte low[8];
     } count;
 };
 

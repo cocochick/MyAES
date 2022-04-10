@@ -14,11 +14,11 @@ void aes_128_ctr::encrypt()
 void aes_128_ctr::decrypt()
 {
 	set_plain();
-	std::reverse(std::begin(plain), std::end(plain));
+	std::reverse(plain, plain + 16);
 	memcpy(&count, plain, 16);
 	while (!flag) {
-		memcpy(plain, &count, 16);
-		std::reverse(std::begin(plain), std::end(plain));
+		memcpy(cipher, &count, 16);
+		std::reverse(cipher, cipher + 16);
 		aes::encrypt();
 		set_plain();
 		
@@ -28,9 +28,11 @@ void aes_128_ctr::decrypt()
 		for (int i = 0; i < 16; i++) {
 			fprintf(out, "%c", plain[i]);
 		}
-		count.high += 1;
-		if(count.high == 0){
-			count.low += 1;
+		unsigned long long int temp = *reinterpret_cast<unsigned long long int*>(count.high) + 1;
+		memcpy(count.high, &temp, 8);
+		if(temp == 0){
+			temp = *reinterpret_cast<unsigned long long int*>(count.low) + 1;
+			memcpy(count.high, &temp, 8);
 		}
 	}
 }

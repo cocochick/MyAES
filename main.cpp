@@ -6,11 +6,22 @@
 #include "aes_128_ofb.h"
 #include "aes_128_ctr.h"
 #include<string>
+
+void read_key(FILE* file, byte key[16]){
+	for(int i = 0; i < 16; ++i){
+		fscanf(file, "%2hhx", key + i);
+	}
+}
+
 int main() {
+	
 	byte iv[16] = { 0x36,0xf1,0x83,0x57,0xbe,0x4d,0xbd,0x77,0xf0,0x50,0x51,0x5c,0x73,0xfc,0xf9,0xf2 };
-	byte key[16] = { 0x14,0x0b,0x41,0xb2,0x2a,0x29,0xbe,0xb4,0x06,0x1b,0xda,0x66,0xb6,0x74,0x7e,0x14 };
+	byte key[16];
 	FILE* in = fopen("./in", "r");
 	FILE* out = fopen("./out", "w");
+	FILE* key_f = fopen("./key", "r");
+	read_key(key_f, key);
+	fclose(key_f);
 	//aes_128_ecb temp(in, out, key);
 	aes_128_cbc temp(in, out, key, iv, bin);
 	temp.decrypt();

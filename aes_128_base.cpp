@@ -9,7 +9,7 @@ void aes_128_base::set_plain()
 	for (int i = 0; i < 16 && !flag; i++) {
 		switch (inmode) {
 			case bin: {
-				if (fscanf(in, "%2hhx", plain + i) == EOF) {
+				if (fscanf(in, "%2hhx", plain + i) <= 0) {
 					for (int j = i; j < 16; j++) {
 						plain[j] = 16 - i;
 					}
@@ -19,7 +19,7 @@ void aes_128_base::set_plain()
 				break;
 			}
 			case str: {
-				if (fscanf(in, "%c", plain + i) == EOF) {
+				if (fscanf(in, "%c", plain + i) <= 0) {
 					for (int j = i; j < 16; j++) {
 						plain[j] = 16 - i;
 					}
